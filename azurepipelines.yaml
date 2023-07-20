@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - dev
+    - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -74,14 +74,16 @@ steps:
       IPADDRESS=$(terraform output -raw public_ip_address)
       HOST=$(terraform output -raw hostname)
       USERNAME=$(terraform output -raw username)
-      PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
+      PRIVATE_KEY=$(terraform output -raw private-ssh-key) 
+      PUBLIC_KEY=$(terraform output -raw public-ssh-key)
       sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
       sudo apt update -y
       sudo apt install software-properties-common
       sudo add-apt-repository --yes --update ppa:ansible/ansible
       sudo apt install ansible -y
       ansible localhost -m shell -a "ssh-keygen -q -b 2048 -t rsa -N '' -f ~/.ssh/id_rsa creates='~/.ssh/id_rsa'"
-      ansible localhost -m shell -a "echo '$PUBLIC_KEY' > ~/.ssh/vm-id-rsa"
+      ansible localhost -m shell -a "echo '$PRIVATE_KEY' > ~/.ssh/vm-id-rsa"
+      ansible localhost -m shell -a "echo '$PUBLIC_KEY'"
       ansible localhost -m shell -a "chmod 700 ~/.ssh/vm-id-rsa"
       ansible localhost -m shell -a "ls -lrt  ~/.ssh/*id*"
       ansible-playbook $(Build.SourcesDirectory)/ansible/ssh-copy.yml -i $(Build.SourcesDirectory)/ansible/inventory.txt --private-key=~/.ssh/vm-id-rsa
@@ -92,4 +94,4 @@ steps:
       playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
       inventoriesAgentMachine: 'file'
       inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
-      args: '--extra-vars="vsts_accesstoken=5o6gxbyx7calguqjm5vw6hbexkik7mfkcx3qatcuawrfsong6mkq"'
+      args: '--extra-vars="vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
