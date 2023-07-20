@@ -35,7 +35,7 @@
 - name: Initial installation of systemd service files and generation of runsvc.sh for deploy agent
   command: "./svc.sh install"
   args:
-    chdir: "{{vsts_workdeployfolder}}"
+    chdir: "{{vsts_agentdeployfolder}}"
   become: true
 
 - name: Enable and start vsts-agent service for deploy agent
