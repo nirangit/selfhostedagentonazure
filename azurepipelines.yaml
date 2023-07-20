@@ -7,14 +7,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: TerraformInstaller@0
-    displayName: "Install Terraform"
-    inputs:
-      terraformVersion: '0.15.0'
-  
-  - checkout: self
-    displayName: 'Checkout repository'
- 
   #- script: |
   #    az group create --name $(TerraformBackend.ResourceGroup) --location eastus
   #    az storage account create --resource-group $(TerraformBackend.ResourceGroup) --name $(TerraformBackend.StorageAccount) --sku Standard_LRS --encryption-services blob 
