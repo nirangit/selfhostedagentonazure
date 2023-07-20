@@ -46,7 +46,7 @@ steps:
       command: 'apply'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-auto-approve'
+      commandOptions: '-refresh-only -auto-approve'
     
   #- task: PowerShell@2
    # inputs:
@@ -85,4 +85,4 @@ steps:
       playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
       inventoriesAgentMachine: 'file'
       inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
-      args: '--extra-vars="vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
+      args: '--extra-vars="vsts_agent_user=ansible vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
