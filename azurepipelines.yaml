@@ -24,9 +24,9 @@ steps:
       backendType: 'azurerm'
       ensureBackend: true
       backendServiceArm: 'azurerm'
-      backendAzureRmResourceGroupName: '$(TerraformBackend.ResourceGroup)'
-      backendAzureRmStorageAccountName: '$(TerraformBackend.StorageAccount)'
-      backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
+      backendAzureRmResourceGroupName: 'tfstorage'
+      backendAzureRmStorageAccountName: 'tfstorage1234'
+      backendAzureRmContainerName: 'tfstate'
       backendAzureRmKey: 'terraform.tfstate'
 
   - task: TerraformTaskV4@4
