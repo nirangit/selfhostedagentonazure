@@ -75,6 +75,7 @@ steps:
       HOST=$(terraform output -raw hostname)
       USERNAME=$(terraform output -raw username)
       PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
+      sudo -- sh -c -e "echo '$IPADDRESS\t$HOST\t$USERNAME'"
       sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
       sudo apt update -y
       sudo apt install software-properties-common
