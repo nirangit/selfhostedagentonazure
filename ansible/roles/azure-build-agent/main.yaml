@@ -7,40 +7,40 @@
     group: "{{vsts_agent_user}}"
     mode: 0755
   with_items:
-    - "{{vsts_agentdeployfolder}}"
-    - "{{vsts_workdeployfolder}}"  
+    - "{{vsts_agentfolder}}"
+    - "{{vsts_workfolder}}"
   become: yes
   become_user: "{{vsts_agent_user}}"
 
 - name: Downlaod and unzip the tar file
   unarchive:
-    dest: "{{vsts_agentdeployfolder}}"
+    dest: "{{vsts_agentfolder}}"
     src: "{{vsts_agent_fullurl}}"
     remote_src: true
     owner: "{{vsts_agent_user}}"
     group: "{{vsts_agent_user}}"
-    creates: "{{vsts_agentdeployfolder}}/config.sh"
+    creates: "{{vsts_agentfolder}}/config.sh"
   become: yes
   become_user: "{{vsts_agent_user}}"
 
-- name: Configure deploy agent
-  command: "./config.sh --unattended --acceptteeeula --deploymentpool --deploymentpoolname {{vsts_deppoolname}} --agent {{vsts_agent_name}} --url {{vsts_server_url}}  --work {{vsts_workdeployfolder}}  --runasservice --auth PAT --token {{vsts_accesstoken}} --replace;"
+- name: Configure vsts-agent
+  command: "./config.sh --unattended --acceptteeeula --url {{vsts_server_url}} --auth PAT --token {{vsts_accesstoken}} --pool '{{vsts_poolname}}' --agent {{vsts_agent_name}} --work {{vsts_workfolder}} --replace"
   args:
-    chdir: "{{vsts_agentdeployfolder}}"
-    creates: "{{vsts_agentdeployfolder}}/.agent"
+    chdir: "{{vsts_agentfolder}}"
+    creates: "{{vsts_agentfolder}}/.agent"
   become: yes
   become_user: "{{vsts_agent_user}}"
 
 
-- name: Initial installation of systemd service files and generation of runsvc.sh for deploy agent
+- name: Initial installation of systemd service files and generation of runsvc.sh
   command: "./svc.sh install"
   args:
-    chdir: "{{vsts_workdeployfolder}}"
+    chdir: "{{vsts_agentfolder}}"
   become: true
 
-- name: Enable and start vsts-agent service for deploy agent
+- name: Enable and start vsts-agent service
   service:
-    name: vsts.agent.{{vsts_accountname}}.{{vsts_deppoolname}}.{{vsts_agent_name}}.service
+    name: vsts.agent.{{vsts_accountname}}.{{vsts_poolname}}.{{vsts_agent_name}}.service
     enabled: yes
     state: started
   become: true
