@@ -105,6 +105,7 @@ resource "azurerm_linux_virtual_machine" "vm1" {
 
 output "public_ip_address" {
   value = azurerm_public_ip.my-pip[0].ip_address
+  depends_on = ["azurerm_linux_virtual_machine.vm1[0]"]
 }
 
 output "hostname" {

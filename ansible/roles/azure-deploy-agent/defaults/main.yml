@@ -7,7 +7,7 @@ vsts_agent_fullurl: "{{vsts_agent_baseurl}}/{{vsts_agent_version}}/{{vsts_agent_
 #vsts_agent_user: "{{ansible_env.USER}}"
 
 vsts_accountname: "Mamtha1689831165865"
-vsts_deppoolname: "dev"
+vsts_deppoolname: "Dev"
 vsts_poolname: "Dev"
 
 vsts_server_url: "https://dev.azure.com/{{vsts_accountname}}"

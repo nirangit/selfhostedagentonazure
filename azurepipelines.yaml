@@ -3,11 +3,10 @@ trigger:
     include:
     - main
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 jobs:
   - job: 'CreatingSelfHostedAgent'
+    pool:
+      vmImage: 'ubuntu-latest'
     steps:
       - task: TerraformInstaller@0
         displayName: "Install Terraform"
@@ -86,3 +85,16 @@ jobs:
           inventoriesAgentMachine: 'file'
           inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
           args: '--extra-vars="vsts_agent_user=ansible vsts_accountname=Mamtha1689831165865 vsts_poolname=Dev vsts_accesstoken=cv43377qvenikzolb53ml4pruvlkqadki3oubilsd7j2yq2d7qlq"'
+
+  - job: 'CreatingK8AndRegistry'
+    pool:
+      name: Dev
+    steps:
+      - task: CmdLine@2
+        displayName: 'Install Kubectl'
+        inputs:
+          script: |
+              sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              sudo chmod a+x kubectl
+              sudo cp kubectl /usr/bin
+    dependsOn: CreatingSelfHostedAgent
