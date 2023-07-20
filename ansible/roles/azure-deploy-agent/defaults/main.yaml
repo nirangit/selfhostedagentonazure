@@ -4,7 +4,7 @@ vsts_agent_version: "3.220.5"
 vsts_agent_baseurl: "https://vstsagentpackage.azureedge.net/agent"
 vsts_agent_file: "vsts-agent-linux-x64-{{vsts_agent_version}}.tar.gz"
 vsts_agent_fullurl: "{{vsts_agent_baseurl}}/{{vsts_agent_version}}/{{vsts_agent_file}}"
-vsts_agent_user: "{{ansible_env.USER}}"
+#vsts_agent_user: "{{ansible_env.USER}}"
 
 vsts_accountname: "Mamtha1689831165865"
 vsts_deppoolname: "dev"
