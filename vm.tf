@@ -6,9 +6,9 @@ terraform {
     }
   }
    backend "azurerm" {
-      resource_group_name  = "tfstorage"      
-      storage_account_name = "tfstorage12345"    
-      container_name       = "terraformstate"
+      resource_group_name  = "__TerraformBackend.ResourceGroup__"      
+      storage_account_name = "__TerraformBackend.StorageAccount__"    
+      container_name       = "__TerraformBackend.ContainerName__"
       key                  = "terraform.tfstate"
   }
 }
@@ -18,7 +18,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "Demo"
+  name     = "Agentrg"
   location = "eastus"
   tags = {
     "env" = "development"
@@ -73,7 +73,7 @@ resource "tls_private_key" "ssh" {
 
 resource "azurerm_linux_virtual_machine" "vm1" {
   count = 1
-  name                            = "vm-${count.index}"
+  name                            = "agentvm"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
   size                            = "Standard_B1s"

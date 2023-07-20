@@ -3,5 +3,5 @@
   hosts: servers
   remote_user: ansible
   roles:
-     - azure-agent
-     - azure-deploy-agent
+    - azure-agent
+    - azure-deploy-agent

@@ -1,2 +1,2 @@
 [servers]
-vm-0
+agentvm

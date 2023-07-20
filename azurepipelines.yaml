@@ -8,6 +8,11 @@ pool:
 
 
 steps:
+  - task: TerraformInstaller@0
+    displayName: "Install Terraform"
+    inputs:
+      terraformVersion: '1.5.3'
+      
   - checkout: self
     displayName: 'Checkout repository'
  
@@ -24,9 +29,9 @@ steps:
       backendType: 'azurerm'
       ensureBackend: true
       backendServiceArm: 'azurerm'
-      backendAzureRmResourceGroupName: 'tfstorage'
-      backendAzureRmStorageAccountName: 'tfstorage12345'
-      backendAzureRmContainerName: 'terraformstate'
+      backendAzureRmResourceGroupName: '$(TerraformBackend.ResourceGroup)'
+      backendAzureRmStorageAccountName: '$(TerraformBackend.StorageAccount)'
+      backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
       backendAzureRmKey: 'terraform.tfstate'
 
   - task: TerraformTaskV4@4
