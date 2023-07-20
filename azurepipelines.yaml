@@ -61,7 +61,7 @@ jobs:
             HOST=$(terraform output -raw hostname)
             USERNAME=$(terraform output -raw username)
             PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
-            echo "##vso[task.setvariable variable=publickey]\"$PUBLIC_KEY\""
+            echo "##vso[task.setvariable variable=publickey]\'$PUBLIC_KEY\'"
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST\t$USERNAME'"
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
 
