@@ -25,7 +25,7 @@ steps:
       ensureBackend: true
       backendServiceArm: 'azurerm'
       backendAzureRmResourceGroupName: 'tfstorage'
-      backendAzureRmStorageAccountName: 'tfstorage1234'
+      backendAzureRmStorageAccountName: 'tfstorage12345'
       backendAzureRmContainerName: 'terraformstate'
       backendAzureRmKey: 'terraform.tfstate'
 
