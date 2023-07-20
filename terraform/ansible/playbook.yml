@@ -1,0 +1,6 @@
+---
+- name: Run the build agent
+  hosts: servers
+  roles:
+     - azure-agent
+     - azure-deploy-agent

@@ -1,0 +1,2 @@
+[servers]
+vm-0
