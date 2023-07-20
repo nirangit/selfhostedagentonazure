@@ -80,11 +80,11 @@ steps:
   #   echo "##vso[task.setvariable variable=Outputs.IPAdd]$IP_ADDRESS"
 
   - script: |
-      IPADDRESS=$(cat $(TerraformOutputs.jsonOutputVariablesPath) | jq '.public_ip_address' -r)
-      HOST=$(cat $(TerraformOutputs.jsonOutputVariablesPath) | jq '.hostname.value' -r)
-      USERNAME=$(cat $(TerraformOutputs.jsonOutputVariablesPath) | jq '.username.value' -r)
-      PRIVATE_KEY=$(cat $(TerraformOutputs.jsonOutputVariablesPath) | jq '.private-ssh-key.value' -r)
-      PUBLIC_KEY=$(cat $(TerraformOutputs.jsonOutputVariablesPath) | jq '.public-ssh-key.value' -r)
+      IPADDRESS=$(cat $(terraformOutput.jsonOutputVariablesPath) | jq '.public_ip_address' -r)
+      HOST=$(cat $(terraformOutput.jsonOutputVariablesPath) | jq '.hostname.value' -r)
+      USERNAME=$(cat $(terraformOutput.jsonOutputVariablesPath) | jq '.username.value' -r)
+      PRIVATE_KEY=$(cat $(terraformOutput.jsonOutputVariablesPath) | jq '.private-ssh-key.value' -r)
+      PUBLIC_KEY=$(cat $(terraformOutput.jsonOutputVariablesPath) | jq '.public-ssh-key.value' -r)
       sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
       sudo apt update -y
       sudo apt install software-properties-common
