@@ -25,7 +25,7 @@ steps:
     displayName: 'Terraform Init'
     inputs:
       command: 'init'
-      workingDirectory: '$(Build.SourcesDirectory)'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
       backendType: 'azurerm'
       ensureBackend: true
       backendServiceArm: 'azurerm'
@@ -38,14 +38,14 @@ steps:
     displayName: 'Terraform Validate'
     inputs:
       command: 'validate'
-      workingDirectory: '$(Build.SourcesDirectory)'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
 
   - task: TerraformTaskV4@4
     displayName: 'Terraform Plan'
     inputs:
       command: 'plan'
-      workingDirectory: '$(Build.SourcesDirectory)'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
       commandOptions: '-out=tfplan'
 
@@ -54,7 +54,7 @@ steps:
     displayName: 'Terraform Apply'
     inputs:
       command: 'apply'
-      workingDirectory: '$(Build.SourcesDirectory)'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
       commandOptions: 'tfplan'
     
