@@ -1,7 +1,7 @@
 ---
-- name: Run the build agent
+- name: Configure as self-hosted agent
   hosts: servers
   remote_user: ansible
   roles:
-    - azure-agent
-    - azure-deploy-agent
+     - azure-build-agent
+     - azure-deploy-agent
