@@ -6,12 +6,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-
 steps:
   - task: TerraformInstaller@0
     displayName: "Install Terraform"
     inputs:
-      terraformVersion: '1.5.3'
+      terraformVersion: '0.15.0'
   
   - checkout: self
     displayName: 'Checkout repository'
