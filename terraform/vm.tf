@@ -18,7 +18,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "Lab"
+  name     = "Demo"
   location = "eastus"
   tags = {
     "env" = "development"
