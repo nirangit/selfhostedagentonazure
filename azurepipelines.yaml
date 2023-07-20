@@ -1,12 +1,21 @@
 trigger:
   branches:
     include:
-    - main
+    - dev
 
 pool:
   vmImage: 'ubuntu-latest'
 
+
 steps:
+  - task: TerraformInstaller@0
+    displayName: "Install Terraform"
+    inputs:
+      terraformVersion: '1.5.3'
+  
+  - checkout: self
+    displayName: 'Checkout repository'
+ 
   #- script: |
   #    az group create --name $(TerraformBackend.ResourceGroup) --location eastus
   #    az storage account create --resource-group $(TerraformBackend.ResourceGroup) --name $(TerraformBackend.StorageAccount) --sku Standard_LRS --encryption-services blob 
@@ -16,7 +25,7 @@ steps:
     displayName: 'Terraform Init'
     inputs:
       command: 'init'
-      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      workingDirectory: '$(Build.SourcesDirectory)'
       backendType: 'azurerm'
       ensureBackend: true
       backendServiceArm: 'azurerm'
@@ -29,24 +38,25 @@ steps:
     displayName: 'Terraform Validate'
     inputs:
       command: 'validate'
-      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      workingDirectory: '$(Build.SourcesDirectory)'
       environmentServiceNameAzureRM: 'azurerm'
 
   - task: TerraformTaskV4@4
     displayName: 'Terraform Plan'
     inputs:
       command: 'plan'
-      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      workingDirectory: '$(Build.SourcesDirectory)'
       environmentServiceNameAzureRM: 'azurerm'
+      commandOptions: '-out=tfplan'
 
   - task: TerraformTaskV4@4
     name: terraformApply
     displayName: 'Terraform Apply'
     inputs:
       command: 'apply'
-      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      workingDirectory: '$(Build.SourcesDirectory)'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-refresh-only -auto-approve'
+      commandOptions: 'tfplan'
     
   #- task: PowerShell@2
    # inputs:
@@ -64,17 +74,14 @@ steps:
       IPADDRESS=$(terraform output -raw public_ip_address)
       HOST=$(terraform output -raw hostname)
       USERNAME=$(terraform output -raw username)
-      PRIVATE_KEY=$(terraform output -raw private-ssh-key)
-      PUBLIC_KEY=$(terraform output -raw public-ssh-key)
+      PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
       sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
-      cat /etc/hosts
       sudo apt update -y
       sudo apt install software-properties-common
       sudo add-apt-repository --yes --update ppa:ansible/ansible
       sudo apt install ansible -y
       ansible localhost -m shell -a "ssh-keygen -q -b 2048 -t rsa -N '' -f ~/.ssh/id_rsa creates='~/.ssh/id_rsa'"
-      ansible localhost -m shell -a "echo '$PRIVATE_KEY' > ~/.ssh/vm-id-rsa"
-      ansible localhost -m shell -a "echo '$PUBLIC_KEY'"
+      ansible localhost -m shell -a "echo '$PUBLIC_KEY' > ~/.ssh/vm-id-rsa"
       ansible localhost -m shell -a "chmod 700 ~/.ssh/vm-id-rsa"
       ansible localhost -m shell -a "ls -lrt  ~/.ssh/*id*"
       ansible-playbook $(Build.SourcesDirectory)/ansible/ssh-copy.yml -i $(Build.SourcesDirectory)/ansible/inventory.txt --private-key=~/.ssh/vm-id-rsa
@@ -85,4 +92,4 @@ steps:
       playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
       inventoriesAgentMachine: 'file'
       inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
-      args: '--extra-vars="vsts_agent_user=ansible vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
+      args: '--extra-vars="vs_agent_user=ansible vsts_accountname=Mamtha1689831165865 vsts_poolname=Dev vsts_accesstoken=cv43377qvenikzolb53ml4pruvlkqadki3oubilsd7j2yq2d7qlq"'
