@@ -58,7 +58,7 @@ steps:
       environmentServiceNameAzureRM: 'azurerm'
       commandOptions: '-auto-approve -input=false tfplan'
   
-   - task: TerraformTaskV4@4
+  - task: TerraformTaskV4@4
     name: terraformOutput
     displayName: 'Terraform Outout'
     inputs:
