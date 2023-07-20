@@ -22,30 +22,7 @@
     creates: "{{vsts_agentdeployfolder}}/config.sh"
   become: yes
   become_user: "{{vsts_agent_user}}"
-  when:
-    - (not service_is_installed) or reconfigure_or_replace
-
-- name: Uninstall agent service
-  command: ./svc.sh uninstall
-  become: true
-  args:
-    chdir: "{{ vsts_agentdeployfolder }}"
-    removes: "{{ vsts_agentdeployfolder }}/runsvc.sh"
-  when:
-    - service_is_installed
-    - reconfigure_or_replace
- 
-- name: Unconfigure agent
-  command: "./config.sh remove --auth PAT --token {{ vsts_accesstoken }}"
-  args:
-    chdir: "{{ vsts_agentdeployfolder }}"
-    removes: "{{ vsts_agentdeployfolder }}/.agent"
-  become: true
-  become_user: "{{ vsts_agent_user }}"
-  when:
-    - service_is_installed
-    - reconfigure_or_replace
-
+  
 - name: Configure deploy agent
   command: "./config.sh --unattended --acceptteeeula --deploymentpool --deploymentpoolname {{vsts_deppoolname}} --agent {{vsts_agent_name}} --url {{vsts_server_url}}  --work {{vsts_workdeployfolder}}  --runasservice --auth PAT --token {{vsts_accesstoken}} --replace;"
   args:
