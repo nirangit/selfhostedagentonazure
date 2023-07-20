@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-  - job: 'Creating Agent VM and configuring as self hosted agent'
+  - job: 'CreatingSelfHostedAgent'
     steps:
       - task: TerraformInstaller@0
         displayName: "Install Terraform"
