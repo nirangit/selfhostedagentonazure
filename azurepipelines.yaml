@@ -21,7 +21,7 @@ steps:
   #    az storage account create --resource-group $(TerraformBackend.ResourceGroup) --name $(TerraformBackend.StorageAccount) --sku Standard_LRS --encryption-services blob 
   #    az storage container create --name $(TerraformBackend.ContainerName) --account-name $(TerraformBackend.StorageAccount)
 
-  - task: TerraformTaskV3@3
+  - task: TerraformTaskV4@4
     displayName: 'Terraform Init'
     inputs:
       command: 'init'
@@ -34,29 +34,28 @@ steps:
       backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
       backendAzureRmKey: 'terraform.tfstate'
 
-  - task: TerraformTaskV3@3
+  - task: TerraformTaskV4@4
     displayName: 'Terraform Validate'
     inputs:
       command: 'validate'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
 
-  - task: TerraformTaskV3@3
+  - task: TerraformTaskV4@4
     displayName: 'Terraform Plan'
     inputs:
       command: 'plan'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-out=tfplan'
 
-  - task: TerraformTaskV3@3
+  - task: TerraformTaskV4@4
     name: terraformApply
     displayName: 'Terraform Apply'
     inputs:
       command: 'apply'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-auto-approve -input=false tfplan'
+      commandOptions: '-auto-approve'
     
   #- task: PowerShell@2
    # inputs:
