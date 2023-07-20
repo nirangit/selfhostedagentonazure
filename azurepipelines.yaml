@@ -42,7 +42,7 @@ steps:
       command: 'plan'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-lock=false'
+      commandOptions: '-lock=false -out=tfplan'
        
   - task: TerraformTaskV4@4
     name: terraformApply
@@ -51,7 +51,7 @@ steps:
       command: 'apply'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-      commandOptions: '-refresh-only -auto-approve'
+      commandOptions: '-refresh-only -auto-approve -input=false tfplan'
     
     
   #- task: PowerShell@2
