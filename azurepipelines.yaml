@@ -1,0 +1,95 @@
+trigger:
+  branches:
+    include:
+    - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+steps:
+  - task: TerraformInstaller@0
+    displayName: "Install Terraform"
+    inputs:
+      terraformVersion: '1.5.3'
+  
+  - checkout: self
+    displayName: 'Checkout repository'
+ 
+  #- script: |
+  #    az group create --name $(TerraformBackend.ResourceGroup) --location eastus
+  #    az storage account create --resource-group $(TerraformBackend.ResourceGroup) --name $(TerraformBackend.StorageAccount) --sku Standard_LRS --encryption-services blob 
+  #    az storage container create --name $(TerraformBackend.ContainerName) --account-name $(TerraformBackend.StorageAccount)
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Init'
+    inputs:
+      command: 'init'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      backendType: 'azurerm'
+      ensureBackend: true
+      backendServiceArm: 'azurerm'
+      backendAzureRmResourceGroupName: '$(TerraformBackend.ResourceGroup)'
+      backendAzureRmStorageAccountName: '$(TerraformBackend.StorageAccount)'
+      backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
+      backendAzureRmKey: 'terraform.tfstate'
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Validate'
+    inputs:
+      command: 'validate'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      environmentServiceNameAzureRM: 'azurerm'
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Plan'
+    inputs:
+      command: 'plan'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      environmentServiceNameAzureRM: 'azurerm'
+      commandOptions: '-out=tfplan'
+
+  - task: TerraformTaskV3@3
+    name: terraformApply
+    displayName: 'Terraform Apply'
+    inputs:
+      command: 'apply'
+      workingDirectory: '$(Build.SourcesDirectory)/terraform'
+      environmentServiceNameAzureRM: 'azurerm'
+      commandOptions: '-auto-approve -input=false tfplan'
+    
+  #- task: PowerShell@2
+   # inputs:
+   #   targetType: 'inline'
+   #   script: |
+   #    Write-Host "##vso[task.setvariable variable=IPAdd;isOutput=true]$(terraform output -raw public_ip_address)"
+   #    Write-Host "##vso[task.setvariable variable=Hostname;isOutput=true]$(terraform output -raw hostname)"  
+   #    Write-Host "##vso[task.setvariable variable=VMUser;isOutput=true]$(terraform output -raw username)" 
+
+  #- script: |
+  #   IP_ADDRESS=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.public_ip_address.value' -r)
+  #   echo "##vso[task.setvariable variable=Outputs.IPAdd]$IP_ADDRESS"
+
+  - script: |
+      IPADDRESS=$(terraform output -raw public_ip_address)
+      HOST=$(terraform output -raw hostname)
+      USERNAME=$(terraform output -raw username)
+      PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
+      sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
+      sudo apt update -y
+      sudo apt install software-properties-common
+      sudo add-apt-repository --yes --update ppa:ansible/ansible
+      sudo apt install ansible -y
+      ansible localhost -m shell -a "ssh-keygen -q -b 2048 -t rsa -N '' -f ~/.ssh/id_rsa creates='~/.ssh/id_rsa'"
+      ansible localhost -m shell -a "echo '$PUBLIC_KEY' > ~/.ssh/vm-id-rsa"
+      ansible localhost -m shell -a "chmod 700 ~/.ssh/vm-id-rsa"
+      ansible localhost -m shell -a "ls -lrt  ~/.ssh/*id*"
+      ansible-playbook $(Build.SourcesDirectory)/ansible/ssh-copy.yml -i $(Build.SourcesDirectory)/ansible/inventory.txt --private-key=~/.ssh/vm-id-rsa
+    
+  - task: Ansible@0
+    inputs:
+      ansibleInterface: 'agentMachine'
+      playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
+      inventoriesAgentMachine: 'file'
+      inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
+      args: '--extra-vars="az_devops_agent_user=ansible vsts_accountname=Mamtha1688995710707 vsts_poolname=DEV vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
