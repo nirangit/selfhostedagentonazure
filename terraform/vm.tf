@@ -104,15 +104,15 @@ resource "azurerm_linux_virtual_machine" "vm1" {
 }
 
 output "public_ip_address" {
-  value = "${azurerm_public_ip.my-pip[0].ip_address}"
+  value = azurerm_public_ip.my-pip[0].ip_address
 }
 
 output "hostname" {
-  value = "${azurerm_linux_virtual_machine.vm1[0].name}"
+  value = azurerm_linux_virtual_machine.vm1[0].name
 }
 
 output "username" {
-  value = "${azurerm_linux_virtual_machine.vm1[0].admin_username}"
+  value = azurerm_linux_virtual_machine.vm1[0].admin_username
 }
 
 output "private-ssh-key" {
