@@ -42,7 +42,7 @@ steps:
       command: 'plan'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       environmentServiceNameAzureRM: 'azurerm'
-       commandOptions: '-lock=false'
+      commandOptions: '-lock=false'
        
   - task: TerraformTaskV4@4
     name: terraformApply
