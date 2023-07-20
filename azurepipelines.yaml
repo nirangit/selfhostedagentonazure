@@ -61,6 +61,7 @@ jobs:
             HOST=$(terraform output -raw hostname)
             USERNAME=$(terraform output -raw username)
             PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
+            echo "##vso[task.setvariable variable=publickey]$PUBLIC_KEY"
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST\t$USERNAME'"
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"
 
@@ -78,7 +79,7 @@ jobs:
         inputs:
           script: |
             ansible localhost -m shell -a "ssh-keygen -q -b 2048 -t rsa -N '' -f ~/.ssh/id_rsa creates='~/.ssh/id_rsa'"
-            ansible localhost -m shell -a "echo '$PUBLIC_KEY' > ~/.ssh/vm-id-rsa"
+            ansible localhost -m shell -a "echo '$(PUBLIC_KEY)' > ~/.ssh/vm-id-rsa"
             ansible localhost -m shell -a "chmod 700 ~/.ssh/vm-id-rsa"
             ansible localhost -m shell -a "ls -lrt  ~/.ssh/*id*"
             ansible-playbook $(Build.SourcesDirectory)/ansible/ssh-copy.yml -i $(Build.SourcesDirectory)/ansible/inventory.txt --private-key=~/.ssh/vm-id-rsa
