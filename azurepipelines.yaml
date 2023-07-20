@@ -8,11 +8,6 @@ pool:
 
 
 steps:
-  - task: TerraformInstaller@0
-    displayName: "Install Terraform"
-    inputs:
-      terraformVersion: '0.15.0'
-  
   - checkout: self
     displayName: 'Checkout repository'
  
