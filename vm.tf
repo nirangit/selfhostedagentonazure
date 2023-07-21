@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.61.0"
+      version = "3.35.0"
     }
   }
    backend "azurerm" {
@@ -66,15 +66,10 @@ resource "azurerm_network_interface" "vm-nic" {
 
 }
 
-data "azurerm_ssh_public_key" "sshkey" {
-   name = "sshkey-pub"
-   resource_group_name = "sshpubkey"
+resource "tls_private_key" "ssh" {
+    algorithm = "RSA"
+    rsa_bits = 4096
 }
-
-#resource "tls_private_key" "ssh" {
-#   algorithm = "RSA"
-#    rsa_bits = 409
-#}
 
 resource "azurerm_linux_virtual_machine" "vm1" {
   count = 1
@@ -86,7 +81,7 @@ resource "azurerm_linux_virtual_machine" "vm1" {
  
  admin_ssh_key {
         username = "ansible"
-        public_key = replace(data.azurerm_ssh_public_key.sshkey.public_key, "\r\n", "")
+        public_key = tls_private_key.ssh.public_key_openssh
     }
 
   disable_password_authentication = true
@@ -121,6 +116,12 @@ output "username" {
   value = azurerm_linux_virtual_machine.vm1[0].admin_username
 }
 
+output "private-ssh-key" {
+  value     = tls_private_key.ssh.private_key_pem
+  sensitive = true
+}
+
 output "public-ssh-key" {
-  value     = replace(data.azurerm_ssh_public_key.sshkey.public_key, "\r\n", "")
+  value     = tls_private_key.ssh.public_key_openssh
+  sensitive = true
 }
