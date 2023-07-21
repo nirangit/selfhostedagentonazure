@@ -60,7 +60,6 @@ jobs:
             sudo apt install software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
-            az group create --name test --location eastus 
       
       - task: CmdLine@2
         displayName: 'Exchanging SSH keys & Add Hosts entry'
