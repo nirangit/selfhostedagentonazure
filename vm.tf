@@ -66,10 +66,15 @@ resource "azurerm_network_interface" "vm-nic" {
 
 }
 
-resource "tls_private_key" "ssh" {
-    algorithm = "RSA"
-    rsa_bits = 4096
+data "azurerm_ssh_public_key" "sshkey" {
+  name                = "ssh-pub"
+  resource_group_name = "sshpubkey"
 }
+
+#resource "tls_private_key" "ssh" {
+#   algorithm = "RSA"
+#    rsa_bits = 4096
+#}
 
 resource "azurerm_linux_virtual_machine" "vm1" {
   count = 1
@@ -81,7 +86,7 @@ resource "azurerm_linux_virtual_machine" "vm1" {
  
  admin_ssh_key {
         username = "ansible"
-        public_key = tls_private_key.ssh.public_key_openssh
+        public_key = replace(data.azurerm_ssh_public_key.sshkey.public_key, "\r\n", "")
     }
 
   disable_password_authentication = true

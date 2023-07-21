@@ -60,6 +60,7 @@ jobs:
             sudo apt install software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
+            az group create --name test --location eastus 
       
       - task: CmdLine@2
         displayName: 'Exchanging SSH keys & Add Hosts entry'
@@ -68,7 +69,7 @@ jobs:
             IPADDRESS=$(terraform output -raw public_ip_address)
             HOST=$(terraform output -raw hostname)
             USERNAME=$(terraform output -raw username)
-            PUBLIC_KEY=$(terraform output -raw private-ssh-key) 
+            PUBLIC_KEY=$(terraform output -raw public-ssh-key) 
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST\t$USERNAME'"
             sudo -- sh -c -e "echo '$IPADDRESS\t$HOST' >> /etc/hosts"      
             ansible localhost -m shell -a "ssh-keygen -q -b 2048 -t rsa -N '' -f ~/.ssh/id_rsa creates='~/.ssh/id_rsa'"
