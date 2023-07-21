@@ -121,12 +121,7 @@ output "username" {
   value = azurerm_linux_virtual_machine.vm1[0].admin_username
 }
 
-output "private-ssh-key" {
-  value     = tls_private_key.ssh.private_key_pem
-  sensitive = true
-}
-
 output "public-ssh-key" {
-  value     = tls_private_key.ssh.public_key_openssh
+  value     = replace(data.azurerm_ssh_public_key.sshkey.public_key, "\r\n", "")
   sensitive = true
 }
