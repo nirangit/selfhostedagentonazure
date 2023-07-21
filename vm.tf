@@ -67,8 +67,8 @@ resource "azurerm_network_interface" "vm-nic" {
 }
 
 data "azurerm_ssh_public_key" "sshkey" {
-  name                = "ssh-pub"
-  resource_group_name = "sshpubkey"  
+   name = "sshkey-pub"
+   resource_group_name = "sshpubkey"
 }
 
 #resource "tls_private_key" "ssh" {
