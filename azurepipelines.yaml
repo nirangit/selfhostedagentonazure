@@ -39,14 +39,14 @@ steps:
     inputs:
       command: 'validate'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
-      environmentServiceNameAzureRM: 'azurerm'
+      environmentServiceNameAzureRM: 'RM-SVC-Connection'
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Plan'
     inputs:
       command: 'plan'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
-      environmentServiceNameAzureRM: 'azurerm'
+      environmentServiceNameAzureRM: 'RM-SVC-Connection'
       commandOptions: '-out=tfplan'
 
   - task: TerraformTaskV3@3
@@ -55,7 +55,7 @@ steps:
     inputs:
       command: 'apply'
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
-      environmentServiceNameAzureRM: 'azurerm'
+      environmentServiceNameAzureRM: 'RM-SVC-Connection'
       commandOptions: '-auto-approve -input=false tfplan'
     
   #- task: PowerShell@2
