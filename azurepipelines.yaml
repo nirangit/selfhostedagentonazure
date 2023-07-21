@@ -28,7 +28,7 @@ steps:
       workingDirectory: '$(Build.SourcesDirectory)/terraform'
       backendType: 'RM-SVC-Connection'
       ensureBackend: true
-      backendServiceArm: 'azurerm'
+      backendServiceArm: 'RM-SVC-Connection'
       backendAzureRmResourceGroupName: '$(TerraformBackend.ResourceGroup)'
       backendAzureRmStorageAccountName: '$(TerraformBackend.StorageAccount)'
       backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
