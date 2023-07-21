@@ -123,5 +123,4 @@ output "username" {
 
 output "public-ssh-key" {
   value     = replace(data.azurerm_ssh_public_key.sshkey.public_key, "\r\n", "")
-  sensitive = true
 }
