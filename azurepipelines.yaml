@@ -92,4 +92,4 @@ steps:
       playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
       inventoriesAgentMachine: 'file'
       inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
-      args: '--extra-vars="vsts_accesstoken=dngclnaex5p2vjeipnsdwdyoozqgoxpawfg6u43pqe6zcodem65q"'
+      args: '--extra-vars="vsts_accesstoken=pkqsixbdohesdd7bcelwhvgvi4pqorqwwhyxnuce2xka5y4lufla"'
