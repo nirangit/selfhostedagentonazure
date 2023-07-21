@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.35.0"
+      version = "3.61.0"
     }
   }
    backend "azurerm" {
@@ -68,12 +68,12 @@ resource "azurerm_network_interface" "vm-nic" {
 
 data "azurerm_ssh_public_key" "sshkey" {
   name                = "ssh-pub"
-  resource_group_name = "sshpubkey"
+  resource_group_name = "sshpubkey"  
 }
 
 #resource "tls_private_key" "ssh" {
 #   algorithm = "RSA"
-#    rsa_bits = 4096
+#    rsa_bits = 409
 #}
 
 resource "azurerm_linux_virtual_machine" "vm1" {
