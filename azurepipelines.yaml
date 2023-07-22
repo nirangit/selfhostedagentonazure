@@ -86,7 +86,7 @@ jobs:
           playbookPathOnAgentMachine: '$(Build.SourcesDirectory)/ansible/playbook.yml'
           inventoriesAgentMachine: 'file'
           inventoryFileOnAgentMachine: '$(Build.SourcesDirectory)/ansible/inventory.txt'
-          args: '--extra-vars="vsts_agent_user=ansible vsts_accountname=Mamtha1689831165865 vsts_poolname=Dev vsts_accesstoken=cv43377qvenikzolb53ml4pruvlkqadki3oubilsd7j2yq2d7qlq"'
+          args: '--extra-vars="vsts_agent_user=ansible vsts_accountname=Niranjani1689831165612 vsts_poolname=Dev vsts_accesstoken=pkqsixbdohesdd7bcelwhvgvi4pqorqwwhyxnuce2xka5y4lufla"'
 
   - job: 'CreatingK8AndRegistry'
     pool:
