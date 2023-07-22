@@ -23,7 +23,7 @@ jobs:
           workingDirectory: '$(Build.SourcesDirectory)'
           backendType: 'azurerm'
           ensureBackend: true
-          backendServiceArm: 'RM-SVC-Connection'
+          backendServiceArm: 'azrmsvc'
           backendAzureRmResourceGroupName: '$(TerraformBackend.ResourceGroup)'
           backendAzureRmStorageAccountName: '$(TerraformBackend.StorageAccount)'
           backendAzureRmContainerName: '$(TerraformBackend.ContainerName)'
@@ -34,14 +34,14 @@ jobs:
         inputs:
           command: 'validate'
           workingDirectory: '$(Build.SourcesDirectory)'
-          environmentServiceNameAzureRM: 'RM-SVC-Connection'
+          environmentServiceNameAzureRM: 'azrmsvc'
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Plan'
         inputs:
           command: 'plan'
           workingDirectory: '$(Build.SourcesDirectory)'
-          environmentServiceNameAzureRM: 'RM-SVC-Connection'
+          environmentServiceNameAzureRM: 'azrmsvc'
        
       - task: TerraformTaskV4@4
         name: terraformApply
@@ -49,7 +49,7 @@ jobs:
         inputs:
           command: 'apply'
           workingDirectory: '$(Build.SourcesDirectory)'
-          environmentServiceNameAzureRM: 'RM-SVC-Connection'
+          environmentServiceNameAzureRM: 'azrmsvc'
           commandOptions: '-auto-approve'
 
       - task: CmdLine@2
